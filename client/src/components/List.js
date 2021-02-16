@@ -1,6 +1,25 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
+import RestaurantFinder from '../apis/RestaurantFinder'
+import { RestaurantsContext } from '../context/RestaurantsContext'
 
-const List = () => {
+const List = (props) => {
+
+    const { restaurants, setRestaurants } = useContext(RestaurantsContext)
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await RestaurantFinder.get('/')
+                setRestaurants(response.data.data.restaurant)
+            } catch (err) {
+                console.log(err)
+            }
+        }
+
+        fetchData()
+
+    }, [])
+
     return (
         <div className="list-group">
             <table className="table table-hover table-dark">
@@ -15,30 +34,22 @@ const List = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>mcdonalds</td>
-                        <td>izmir</td>
-                        <td>$$</td>
-                        <td>Rating</td>
-                        <td>
-                            <button className="btn btn-warning">Update</button>
-                        </td>
-                        <td>
-                            <button className="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>mcdonalds</td>
-                        <td>izmir</td>
-                        <td>$$</td>
-                        <td>Rating</td>
-                        <td>
-                            <button className="btn btn-warning">Update</button>
-                        </td>
-                        <td>
-                            <button className="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
+                    {restaurants && restaurants.map(e => {
+                        return (
+                            <tr key={e.id}>
+                                <td>{e.name}</td>
+                                <td>{e.location}</td>
+                                <td>{"$".repeat(e.price_range)}</td>
+                                <td>reviews</td>
+                                <td>
+                                    <button className="btn btn-warning">Update</button>
+                                </td>
+                                <td>
+                                    <button className="btn btn-danger">Delete</button>
+                                </td>
+                            </tr>
+                        )
+                    })}
                 </tbody>
             </table>
         </div>
