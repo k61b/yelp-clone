@@ -1,9 +1,11 @@
 import React from 'react'
+import Update from '../components/Update'
 
 const UpdatePage = () => {
     return (
         <div>
-            Update
+            <h1 className="text-center">Update</h1>
+            <Update />
         </div>
     )
 }
