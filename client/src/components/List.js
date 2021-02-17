@@ -23,7 +23,8 @@ const List = (props) => {
 
     }, [])
 
-    const handleDelete = async (id) => {
+    const handleDelete = async (i, id) => {
+        i.stopPropagation()
         try {
             const response = await RestaurantFinder.delete(`/${id}`)
             setRestaurants(restaurants.filter(elem => {
@@ -34,8 +35,13 @@ const List = (props) => {
         }
     }
 
-    const handleUpdate = async (id) => {
+    const handleUpdate = async (i, id) => {
+        i.stopPropagation()
         history.push(`/restaurants/${id}/update`)
+    }
+
+    const handleSelect = async (id) => {
+        history.push(`/restaurants/${id}`)
     }
 
     return (
@@ -54,16 +60,16 @@ const List = (props) => {
                 <tbody>
                     {restaurants && restaurants.map(e => {
                         return (
-                            <tr key={e.id}>
+                            <tr onClick={() => handleSelect(e.id)} key={e.id}>
                                 <td>{e.name}</td>
                                 <td>{e.location}</td>
                                 <td>{"$".repeat(e.price_range)}</td>
                                 <td>reviews</td>
                                 <td>
-                                    <button onClick={() => handleUpdate(e.id)} className="btn btn-warning">Update</button>
+                                    <button onClick={(i) => handleUpdate(i, e.id)} className="btn btn-warning">Update</button>
                                 </td>
                                 <td>
-                                    <button onClick={() => handleDelete(e.id)} className="btn btn-danger">Delete</button>
+                                    <button onClick={(i) => handleDelete(i, e.id)} className="btn btn-danger">Delete</button>
                                 </td>
                             </tr>
                         )
