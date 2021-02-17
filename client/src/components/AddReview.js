@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import RestaurantFinder from '../apis/RestaurantFinder'
-import { useHistory, useLocation, useParams } from 'react-router-dom'
+import { useLocation, useParams, useHistory } from 'react-router-dom'
 
 const AddReview = () => {
     const { id } = useParams()
+    const location = useLocation()
+    const history = useHistory()
 
     const [name, setName] = useState("")
     const [reviewText, setReviewText] = useState("")
@@ -17,6 +19,8 @@ const AddReview = () => {
                 review: reviewText,
                 rating
             })
+            history.push("/")
+            history.push(location.pathname)
         } catch (err) {
             console.log(err)
         }

@@ -11,7 +11,8 @@ const db = require('../db')
 router.get('/', async (req, res) => {
 
     try {
-        const results = await db.query("select * from restaurants")
+        const results = await db.query(
+            "select * from restaurants left join (select restaurant_id, COUNT(*), TRUNC(AVG(rating),1) as average_rating from reviews group by restaurant_id) reviews on restaurants.id = reviews.restaurant_id;")
         res.status(200).json({
             results: results.rows.length,
             data: {
@@ -28,7 +29,9 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
 
     try {
-        const restaurant = await db.query("select * from restaurants where id = $1", [req.params.id])
+        const restaurant = await db.query(
+            "select * from restaurants left join (select restaurant_id, COUNT(*), TRUNC(AVG(rating),1) as average_rating from reviews group by restaurant_id) reviews on restaurants.id = reviews.restaurant_id where id = $1", 
+            [req.params.id])
 
         const reviews = await db.query("select * from reviews where restaurant_id = $1", [req.params.id])
         res.status(200).json({

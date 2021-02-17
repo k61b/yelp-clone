@@ -20,7 +20,7 @@ const DetailPage = () => {
             }
         }
         fetchData()
-    }, [])
+    }, [setSelectedRestaurant, id])
     return (
         <div>
             {selectedRestaurant && (
