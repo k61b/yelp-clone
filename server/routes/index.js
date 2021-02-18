@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const restaurantApi = require('./restaurant')
+const placeApi = require('./place')
 
-router.use('/api/v1/restaurants', restaurantApi)
+router.use('/api/v1/places', placeApi)
 
 module.exports = router
