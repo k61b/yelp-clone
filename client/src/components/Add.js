@@ -1,22 +1,24 @@
 import React, { useContext, useState } from 'react'
-import RestaurantFinder from '../apis/RestaurantFinder'
-import { RestaurantsContext } from '../context/RestaurantsContext'
+import PlaceFinder from '../apis/PlaceFinder'
+import { PlacesContext } from '../context/PlacesContext'
 
 const Add = () => {
-    const { addRestaurants } = useContext(RestaurantsContext)
+    const { addPlaces } = useContext(PlacesContext)
     const [name, setName] = useState("")
     const [location, setLocation] = useState("")
+    const [placeType, setPlaceType] = useState("")
     const [priceRange, setPriceRange] = useState("Price Range")
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const response = await RestaurantFinder.post("/", {
+            const response = await PlaceFinder.post("/", {
                 name,
                 location,
+                place_type: placeType,
                 price_range: priceRange
             })
-            addRestaurants(response.data.data.restaurant)
+            addPlaces(response.data.data.place)
         } catch (err) {
             console.log(err)
         }
@@ -42,6 +44,15 @@ const Add = () => {
                             className="form-control"
                             type="text"
                             placeholder="location"
+                        />
+                    </div>
+                    <div className="col">
+                        <input
+                            value={placeType}
+                            onChange={(e) => setPlaceType(e.target.value)}
+                            className="form-control"
+                            type="text"
+                            placeholder="Place Type"
                         />
                     </div>
                     <div className="col">

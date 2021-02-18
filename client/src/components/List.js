@@ -1,20 +1,20 @@
 import React, { useContext, useEffect } from 'react'
-import RestaurantFinder from '../apis/RestaurantFinder'
-import { RestaurantsContext } from '../context/RestaurantsContext'
+import PlaceFinder from '../apis/PlaceFinder'
+import { PlacesContext } from '../context/PlacesContext'
 import { useHistory } from 'react-router-dom'
 import StarRating from './StarRating'
 
 const List = (props) => {
 
-    const { restaurants, setRestaurants } = useContext(RestaurantsContext)
+    const { places, setPlaces } = useContext(PlacesContext)
 
     let history = useHistory()
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await RestaurantFinder.get('/')
-                setRestaurants(response.data.data.restaurant)
+                const response = await PlaceFinder.get('/')
+                setPlaces(response.data.data.place)
             } catch (err) {
                 console.log(err)
             }
@@ -22,13 +22,13 @@ const List = (props) => {
 
         fetchData()
 
-    }, [setRestaurants])
+    }, [setPlaces])
 
     const handleDelete = async (i, id) => {
         i.stopPropagation()
         try {
-            await RestaurantFinder.delete(`/${id}`)
-            setRestaurants(restaurants.filter(elem => {
+            await PlaceFinder.delete(`/${id}`)
+            setPlaces(places.filter(elem => {
                 return elem.id !== id
             }))
         } catch (err) {
@@ -38,11 +38,11 @@ const List = (props) => {
 
     const handleUpdate = async (i, id) => {
         i.stopPropagation()
-        history.push(`/restaurants/${id}/update`)
+        history.push(`/places/${id}/update`)
     }
 
     const handleSelect = async (id) => {
-        history.push(`/restaurants/${id}`)
+        history.push(`/places/${id}`)
     }
 
     const renderRating = (e) => {
@@ -62,8 +62,9 @@ const List = (props) => {
             <table className="table table-hover table-dark">
                 <thead>
                     <tr>
-                        <th scope="col">Restaurant</th>
+                        <th scope="col">Place</th>
                         <th scope="col">Location</th>
+                        <th scope="col">Place Type</th>
                         <th scope="col">Price Range</th>
                         <th scope="col">Ratings</th>
                         <th scope="col">Edit</th>
@@ -71,11 +72,12 @@ const List = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {restaurants && restaurants.map(e => {
+                    {places && places.map(e => {
                         return (
                             <tr onClick={() => handleSelect(e.id)} key={e.id}>
                                 <td>{e.name}</td>
                                 <td>{e.location}</td>
+                                <td>{e.place_type}</td>
                                 <td>{"$".repeat(e.price_range)}</td>
                                 <td>{renderRating(e)}</td>
                                 <td>
