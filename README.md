@@ -34,10 +34,10 @@ CREATE TABLE reviews (
 4) Install Packages
 ````bash
 cd server
-yarn add
+yarn
 yarn run dev
 cd ..
 cd client
-yarn add
-yarn run dev
+yarn
+yarn start
 ````
